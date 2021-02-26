@@ -1,0 +1,48 @@
+{
+  "Version": "2008-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetBucketLocation",
+      "Resource": [
+        "<bucket_arn>",
+        "<bucket_arn>/*"
+      ]
+    },
+    {
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": ["s3:ListBucket","s3:PutObject", "s3:DeleteObject"],
+      "Resource": [
+        "<bucket_arn>",
+        "<bucket_arn>/*"
+      ],
+      "Condition": {
+        "StringNotEquals": {
+          "aws:sourceVpce": [
+            "vpce-xxx",
+            "ENDPOINT_NO1",
+            "ENDPOINT_NO2"
+          ],
+          "aws:userid": "<user_id>"
+        }
+      }
+    },
+    {
+      "Effect": "Deny",
+      "Principal": "*",
+      "NotAction": ["s3:GetBucketLocation", "s3:ListBucket", "s3:PutObject", "s3:DeleteObject"],
+      "Resource": [
+        "<bucket_arn>",
+        "<bucket_arn>/*"
+      ],
+      "Condition": {
+        "StringNotEquals": {
+          "aws:sourceVpce": "vpce-xxx",
+          "aws:userid": "<user_id>"
+        }
+      }
+    }
+  ]
+}
